@@ -1,24 +1,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import data from './data.json'
 
-const postList = ref(
-  Array.from({
-    length: 10,
-  }).map((_, index) => index),
-)
+const list = Object.values(data)
+const postList = ref(list.slice(0, 10))
 </script>
 
 <template>
   <main class="container">
-    <article class="article" v-for="post in postList" :key="post">
+    <article class="article" v-for="post in postList" :key="post.id">
       <header class="header">
-        <p class="title">title-{{ post }}</p>
-        <p class="time">1111</p>
+        <p class="title">{{ post.id }}</p>
+        <p class="time">{{ post.createTime }}</p>
       </header>
       <main class="main">
-        <p class="text">2222</p>
-        <div class="photos single">
-          <div class="photo"></div>
+        <p class="text">{{ post.text }}</p>
+        <div
+          class="photos"
+          :class="{
+            single: post.photoList.length === 1,
+          }"
+        >
+          <div
+            class="photo"
+            v-for="url in post.photoList"
+            :key="url"
+            :style="{ backgroundImage: `url(${url})` }"
+          >
+            <!-- <img :src="url" :style="{ opacity: 0 }" /> -->
+          </div>
         </div>
       </main>
     </article>
@@ -66,13 +76,18 @@ const postList = ref(
     border-radius: 8px;
     overflow: hidden;
     .photo {
-      height: 50px;
+      height: 150px;
       background-color: #fff;
+      background-position: center;
+      background-size: cover;
       cursor: pointer;
     }
 
     &.single {
       grid-template-columns: 1fr;
+      .photo {
+        height: 400px;
+      }
     }
   }
 }
