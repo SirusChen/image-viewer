@@ -11,24 +11,33 @@ const postList = ref(list.slice(0, 10))
     <article class="article" v-for="post in postList" :key="post.id">
       <header class="header">
         <p class="title">{{ post.id }}</p>
-        <p class="time">{{ post.createTime }}</p>
+        <p v-if="post.createTime" class="time">{{ post.createTime }}</p>
       </header>
       <main class="main">
-        <p class="text">{{ post.text }}</p>
+        <p v-if="post.text" class="text">{{ post.text }}</p>
         <div
           class="photos"
           :class="{
             single: post.photoList.length === 1,
           }"
         >
-          <div
+          <el-image
             class="photo"
             v-for="url in post.photoList"
             :key="url"
+            :src="url"
+            :zoom-rate="1.2"
+            :max-scale="7"
+            :min-scale="0.2"
+            :preview-src-list="[url]"
+            :initial-index="4"
+            fit="cover"
+          />
+          <!-- <div
             :style="{ backgroundImage: `url(${url})` }"
           >
-            <!-- <img :src="url" :style="{ opacity: 0 }" /> -->
-          </div>
+            <img :src="url" :style="{ opacity: 0 }" />
+          </div> -->
         </div>
       </main>
     </article>
