@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { data } from '../assets/data1'
 import PhotoList from '../components/PhotoList.vue'
+import axios from 'axios'
 
-const postList = ref(data.slice(60, 80))
+const postList = ref<any[]>([])
+
+async function init() {
+  const data = await axios.get('/data/v1/get')
+  console.log(data)
+  postList.value = data.data.data.slice(0, 20)
+}
+
+init()
 </script>
 
 <template>
