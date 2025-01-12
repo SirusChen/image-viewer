@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import data from './data.json'
+import { data } from '../assets/data1'
 
-const list = Object.values(data)
-const postList = ref(list.slice(0, 10))
+const postList = ref(data.slice(0, 10))
 </script>
 
 <template>
@@ -11,25 +10,25 @@ const postList = ref(list.slice(0, 10))
     <article class="article" v-for="post in postList" :key="post.id">
       <header class="header">
         <p class="title">{{ post.id }}</p>
-        <p v-if="post.createTime" class="time">{{ post.createTime }}</p>
+        <p v-if="post.created_at" class="time">{{ post.created_at }}</p>
       </header>
       <main class="main">
-        <p v-if="post.text" class="text">{{ post.text }}</p>
+        <p v-if="post.full_text" class="text">{{ post.full_text }}</p>
         <div
           class="photos"
           :class="{
-            single: post.photoList.length === 1,
+            single: post.media.length === 1,
           }"
         >
           <el-image
             class="photo"
-            v-for="url in post.photoList"
-            :key="url"
-            :src="url"
+            v-for="m in post.media"
+            :key="m.media_url_https"
+            :src="m.media_url_https"
             :zoom-rate="1.2"
             :max-scale="7"
             :min-scale="0.2"
-            :preview-src-list="[url]"
+            :preview-src-list="[m.media_url_https]"
             :initial-index="4"
             fit="cover"
           />
@@ -45,16 +44,20 @@ const postList = ref(list.slice(0, 10))
 </template>
 
 <style lang="less" scoped>
+@border-color: #888;
+
 .container {
   margin: auto;
   width: 500px;
+  border-left: 1px solid @border-color;
+  border-right: 1px solid @border-color;
 }
 
 .article {
   box-sizing: border-box;
   padding: 16px;
   & + .article {
-    border-top: 1px solid #888;
+    border-top: 1px solid @border-color;
   }
 }
 
